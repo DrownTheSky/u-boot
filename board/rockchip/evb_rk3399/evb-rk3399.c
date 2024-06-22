@@ -17,6 +17,8 @@
 #include <usb.h>
 #include <dwc3-uboot.h>
 #include <spl.h>
+#include <asm/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -71,6 +73,31 @@ int rk_board_init(void)
 	}
 
 out:
+	return 0;
+}
+
+int rk_board_late_init(void)
+{
+	printf("\n");
+	printf("*****************************************************************\n");
+	printf("************** Welcome To Uboot Console By Weidong **************\n");
+	printf("*****************************************************************\n");
+	printf("\n");
+
+	if (gpio_request((RK_GPIO0 | RK_PA3), "led_green") == 0) {
+		gpio_direction_output((RK_GPIO0 | RK_PA3), 1);
+		printf("GPIO0_PA3 green led on \r\n");
+	} else {
+		printf("gpio_request GPIO0_PA3 green err\n");
+	}
+
+	if (gpio_request((RK_GPIO0 | RK_PB2), "led_yellow") == 0) {
+		gpio_direction_output((RK_GPIO0 | RK_PB2), 1);
+		printf("GPIO0_PB2 yellow led on \r\n");
+	} else {
+		printf("gpio_request GPIO0_PB2 yellow err\n");
+	}
+
 	return 0;
 }
 
